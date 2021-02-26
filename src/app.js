@@ -1,39 +1,94 @@
-var app = {
-    title: "Indecision App",
-    subtitle: "My first react site hahah",
-    options: ["one", "two", "three"],
-}
-var template = (
-    <div>
-        <p>{app.title}</p>
-        <p>{app.subtitle}</p> 
-        <p>Jojo</p>
-        <p>{(app.options && app.options.length > 0) ? `Here are your options ${app.options}`: "No options"}</p>
-    </div>
-);
+class IndecisionApp extends React.Component {
+    render() {
+        const title = 'Indecision';
+        const subtitle = 'I love my milo boy';
+        const options = [1,2,3];
 
-var info = {
-    name : "Genshin Impact",
-    desc : "I want a C6 Ningguang. Gacha Lords please be kind.",
-    longdesc : "Currently at C3 Ningguang. About to get C4.",
-    num: 19,
+        return (
+            <div>
+                <Header title={title} subtitle={subtitle}/>
+                <Action/>
+                <Options options={options}/>
+                <AddOption/>
+            </div>
+        );
+    }
 }
 
-function getLongDesc(buffer) {
-    if (buffer) 
-        return <p>{buffer}</p>;
-    else
-        return "Unknown"
+class Header extends React.Component {
+    render() {
+        console.log(this.props);
+        return (
+            <div>
+                <h1>{this.props.title}</h1>
+                <h2>{this.props.subtitle}</h2>
+                <p>This is from Header</p>
+            </div>
+        );
+    }
 }
 
-var templatetwo = (
-    <div>
-        <p>{info.name ? info.name.toUpperCase() : "Anonymous"}</p>
-        {(info.num && info.num >= 18) && <p>{info.num}</p>}
-        {getLongDesc(info.longdesc)}
+class Action extends React.Component {
+    handlePick() {
+        alert('handle pickk');
+    }
 
-    </div>
-);
+    render() {
+        return (
+            <div>
+                <button onClick={this.handlePick}>What should I do?</button>
+            </div>
+        );
+    }
+}
 
-var appRoot = document.getElementById('app')
-ReactDOM.render(template, appRoot);
+class Options extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleRemoveAll = this.handleRemoveAll.bind(this);
+    }
+
+    handleRemoveAll() {
+        alert("remove");
+    }
+    
+    render() {
+        return (
+            <div>
+                <button onClick={this.handleRemoveAll}>Remove All</button>
+                {(this.props.options.length && <p>{this.props.options.length}</p>)}
+                {this.props.options.map((x,y) => <Option option={x} key={y}/>)}
+            </div>
+        );
+    }
+}
+
+class Option extends React.Component {
+    render() {
+        return (
+            <div>
+                {(this.props.option && <p>{this.props.option}</p>)}
+            </div>
+        );
+    }
+}
+
+class AddOption extends React.Component {
+    handAddOption(e) {
+        e.preventDefault();
+        const val = e.target.elements.inputArea.value.trim();
+        alert(val);
+    }
+    render() {
+        return (
+            <div>
+                <form onSubmit={this.handAddOption}>
+                    <input type="text" name="inputArea"/>
+                    <button>AddOption</button>
+                </form>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<IndecisionApp/>, document.getElementById('app'));
